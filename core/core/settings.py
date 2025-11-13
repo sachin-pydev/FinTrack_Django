@@ -32,7 +32,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # Load secret key and debug from environment
 SECRET_KEY = env('DJANGO_SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=False)
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
+
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',   # ADD THIS RIGHT HERE
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -128,9 +130,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+STATIC_ROOT = BASE_DIR / "staticfiles" 
+
+
 
 
 # Default primary key field type

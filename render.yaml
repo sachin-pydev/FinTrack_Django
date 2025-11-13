@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: fintrack
+    env: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn core.core.wsgi:application"
+    autoDeploy: true
+    envVars:
+      DJANGO_SECRET_KEY: "replace_with_real_secret_key"
+      DEBUG: "False"
+      ALLOWED_HOSTS: "your_render_url"
