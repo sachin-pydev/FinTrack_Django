@@ -1,7 +1,14 @@
-#!/usr/bin/env bash
-set -o errexit
+#!/bin/bash
 
-pip install -r requirements.txt
+# Exit immediately if a command exits with a non-zero status
+set -e
 
-python core/manage.py collectstatic --noinput
+# Install dependencies (just in case Render didn't do it)
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+
+# Run migrations
 python core/manage.py migrate
+
+# Collect static files
+python core/manage.py collectstatic --noinput

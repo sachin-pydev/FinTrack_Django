@@ -26,8 +26,6 @@ import environ
 env = environ.Env(
     DEBUG=(bool, False)
 )
-# Read the .env file
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Load secret key and debug from environment
 
@@ -37,11 +35,6 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
-
-
-
-
 
 # Application definition
 
