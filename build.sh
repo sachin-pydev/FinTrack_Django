@@ -1,14 +1,29 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Exit immediately if a command exits with a non-zero status
+# Exit on any error
 set -e
 
-# Install dependencies (just in case Render didn't do it)
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+# Activate virtual environment if exists
+if [ -d ".venv" ]; then
+    source .venv/bin/activate
+fi
 
-# Run migrations
-python core/manage.py migrate
+# Upgrade pip
+pip install --upgrade pip
 
-# Collect static files
+# Install requirements
+pip install -r requirements.txt
+
+# Make sure static files go to correct folder
 python core/manage.py collectstatic --noinput
+
+# Apply migrations
+python core/manage.py migrate --noinput
+
+# Set environment variable for Django settings (in case not set in Render)
+export DJANGO_SETTINGS_MODULE=core.core.settings
+
+# Start Gunicorn
+exec gunicorn core.core.wsgi:application \
+    --bind 0.0.0.0:10000 \
+    --workers 3
