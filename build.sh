@@ -1,27 +1,17 @@
 #!/usr/bin/env bash
-
-# Exit on any error
 set -e
 
-# Activate virtual environment if exists
-if [ -d ".venv" ]; then
-    source .venv/bin/activate
-fi
-
 # Upgrade pip
-pip install --upgrade pip
+python -m pip install --upgrade pip
 
-# Install requirements
+# Install dependencies
 pip install -r requirements.txt
-
-# Make sure static files go to correct folder
-python core/manage.py collectstatic --noinput
 
 # Apply migrations
 python core/manage.py migrate --noinput
 
-# Set environment variable for Django settings (in case not set in Render)
-export DJANGO_SETTINGS_MODULE=core.core.settings
+# Collect static files
+python core/manage.py collectstatic --noinput
 
 # Start Gunicorn
 exec gunicorn core.core.wsgi:application \
